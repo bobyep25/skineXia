@@ -1,0 +1,476 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baseline 3 of 5: Korean Wild Mushrooms | MycoClinic Projects</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --equity-purple: #7C3AED;
+            --equity-purple-light: #8B5CF6;
+            --equity-purple-bg: #F5F3FF;
+            --wealthy-teal: #0D9488;
+            --wealthy-teal-bg: #F0FDFA;
+            --poor-amber: #D97706;
+            --poor-amber-bg: #FFFBEB;
+            --crisis-red: #DC2626;
+            --crisis-red-bg: #FEF2F2;
+            --bg-primary: #FAFBFC;
+            --bg-card: #FFFFFF;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --border-light: #E2E8F0;
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'DM Sans', sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
+        
+        .hero { background: linear-gradient(135deg, #4C1D95 0%, #6D28D9 50%, #7C3AED 100%); color: white; padding: 60px 24px; text-align: center; position: relative; }
+        .hero-content { position: relative; max-width: 900px; margin: 0 auto; }
+        .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 50px; font-size: 0.85rem; font-weight: 600; margin-bottom: 24px; }
+        .hero-title { font-size: clamp(2.5rem, 5vw, 3.5rem); font-weight: 700; line-height: 1.1; margin-bottom: 20px; }
+        .hero-subtitle { font-size: 1.25rem; opacity: 0.9; max-width: 700px; margin: 0 auto; }
+
+        .data-notice { background: var(--equity-purple-bg); border: 1px solid var(--equity-purple); border-radius: var(--radius-md); padding: 16px 24px; margin-bottom: 32px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+        .data-notice-icon { font-size: 24px; }
+        .data-notice-text { flex: 1; min-width: 200px; }
+        .data-notice-title { font-weight: 600; color: var(--equity-purple); margin-bottom: 4px; }
+        .data-notice-desc { font-size: 0.9rem; color: var(--text-secondary); }
+
+        .filter-section { background: white; border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-md); border: 1px solid var(--border-light); margin-bottom: 32px; }
+        .filter-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+        .filter-icon { width: 40px; height: 40px; background: var(--equity-purple-bg); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .filter-title { font-size: 1.1rem; font-weight: 600; }
+        .filter-subtitle { font-size: 0.85rem; color: var(--text-secondary); }
+        .filter-grid { display: grid; gap: 20px; }
+        @media (min-width: 768px) { .filter-grid { grid-template-columns: 1fr 1fr 200px; } }
+        .filter-group { display: flex; flex-direction: column; gap: 8px; }
+        .filter-label { font-size: 0.85rem; font-weight: 500; color: var(--text-secondary); }
+        .filter-select { padding: 12px 16px; border: 2px solid var(--border-light); border-radius: var(--radius-sm); font-family: inherit; font-size: 1rem; background: white; cursor: pointer; transition: all 0.2s ease; }
+        .filter-select:hover { border-color: var(--equity-purple-light); }
+        .filter-select:focus { outline: none; border-color: var(--equity-purple); box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1); }
+        .filter-btn { padding: 12px 24px; background: var(--equity-purple); color: white; border: none; border-radius: var(--radius-sm); font-family: inherit; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; }
+        .filter-btn:hover { background: var(--equity-purple-light); transform: translateY(-2px); }
+
+        .stats-banner { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; margin: -40px auto 40px; padding: 0 24px; max-width: 1200px; position: relative; z-index: 10; }
+        .stat-card { background: white; border-radius: var(--radius-lg); padding: 24px; text-align: center; box-shadow: var(--shadow-lg); border: 1px solid var(--border-light); }
+        .stat-card.purple { border-top: 4px solid var(--equity-purple); }
+        .stat-card.teal { border-top: 4px solid var(--wealthy-teal); }
+        .stat-card.amber { border-top: 4px solid var(--poor-amber); }
+        .stat-card.red { border-top: 4px solid var(--crisis-red); }
+        .stat-icon { font-size: 2rem; margin-bottom: 12px; }
+        .stat-value { font-family: 'DM Sans', sans-serif; font-size: 1.75rem; font-weight: 700; margin-bottom: 4px; }
+        .stat-card.purple .stat-value { color: var(--equity-purple); }
+        .stat-card.teal .stat-value { color: var(--wealthy-teal); }
+        .stat-card.amber .stat-value { color: var(--poor-amber); }
+        .stat-card.red .stat-value { color: var(--crisis-red); }
+        .stat-label { font-size: 0.85rem; color: var(--text-secondary); }
+
+        .section { margin-bottom: 48px; }
+        .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+        .section-number { width: 36px; height: 36px; background: var(--equity-purple); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+        .section-title { font-size: 1.5rem; font-weight: 700; }
+        .card { background: var(--bg-card); border-radius: var(--radius-lg); padding: 32px; box-shadow: var(--shadow-md); border: 1px solid var(--border-light); margin-bottom: 24px; }
+        .card-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+
+        .comparison-container { display: grid; gap: 24px; margin-bottom: 32px; }
+        @media (min-width: 768px) { .comparison-container { grid-template-columns: 1fr 1fr; } }
+        .district-card { background: var(--bg-primary); border-radius: var(--radius-md); padding: 24px; border: 2px solid transparent; transition: all 0.3s ease; }
+        .district-card.wealthy { border-color: var(--wealthy-teal); background: var(--wealthy-teal-bg); }
+        .district-card.poor { border-color: var(--poor-amber); background: var(--poor-amber-bg); }
+        .district-badge { display: inline-block; padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+        .district-card.wealthy .district-badge { background: var(--wealthy-teal); color: white; }
+        .district-card.poor .district-badge { background: var(--poor-amber); color: white; }
+        .district-name { font-size: 1.25rem; font-weight: 700; margin-bottom: 16px; }
+        .district-stats { display: flex; flex-direction: column; gap: 12px; }
+        .district-stat { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed var(--border-light); }
+        .district-stat:last-child { border-bottom: none; }
+        .district-stat-label { font-size: 0.9rem; color: var(--text-secondary); }
+        .district-stat-value { font-family: 'DM Sans', sans-serif; font-weight: 600; }
+        .district-card.wealthy .district-stat-value { color: var(--wealthy-teal); }
+        .district-card.poor .district-stat-value { color: var(--poor-amber); }
+
+        .chart-container { position: relative; height: 400px; margin: 20px 0; }
+        .insight-box { background: var(--equity-purple-bg); border: 1px solid var(--equity-purple); border-radius: var(--radius-md); padding: 20px 24px; display: flex; align-items: flex-start; gap: 16px; margin-top: 24px; }
+        .insight-box.warning { background: var(--poor-amber-bg); border-color: var(--poor-amber); }
+        .insight-icon { font-size: 24px; flex-shrink: 0; }
+        .insight-text { font-size: 0.95rem; }
+        .insight-text strong { color: var(--equity-purple); }
+        .insight-box.warning .insight-text strong { color: var(--poor-amber); }
+
+        .data-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .data-table th, .data-table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border-light); }
+        .data-table th { background: var(--bg-primary); font-weight: 600; font-size: 0.85rem; color: var(--text-secondary); }
+        .data-table tr:hover { background: var(--bg-primary); }
+        .table-value { font-family: 'DM Sans', sans-serif; font-weight: 600; }
+        .table-value.positive { color: var(--wealthy-teal); }
+        .table-value.negative { color: var(--crisis-red); }
+        .table-responsive { overflow-x: auto; }
+
+        .year-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--equity-purple); color: white; padding: 4px 12px; border-radius: 50px; font-size: 0.8rem; font-weight: 600; margin-left: 12px; }
+        .sources { background: var(--bg-primary); border-radius: var(--radius-md); padding: 24px; margin-top: 48px; }
+        .sources-title { font-weight: 600; margin-bottom: 16px; }
+        .source-item { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 8px; padding-left: 16px; position: relative; }
+        .source-item::before { content: '"¢'; position: absolute; left: 0; color: var(--equity-purple); }
+        .footer { text-align: center; padding: 32px 24px; color: var(--text-secondary); font-size: 0.85rem; }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav style="background: white; border-bottom: 1px solid #E2E8F0; padding: 16px 24px; position: sticky; top: 0; z-index: 100;">
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+            <a href="index.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: #1E293B;">
+                <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #2563EB 0%, #3B82F6 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px;">ðŸŽ“</div>
+                <div><div style="font-weight: 700; font-size: 1rem;">Korean Wild Mushrooms</div><div style="font-size: 0.7rem; color: #64748B;">MycoClinic</div></div>
+            </a>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <a href="index.html" style="padding: 8px 14px; border-radius: 50px; text-decoration: none; font-size: 0.85rem; font-weight: 500; color: #64748B;">Home</a>
+                <a href="Telemedicine.html" style="padding: 8px 14px; border-radius: 50px; text-decoration: none; font-size: 0.85rem; font-weight: 500; color: #64748B;">Telemedicine</a>
+                <a href="Kaggle Mushrooms.html" style="padding: 8px 14px; border-radius: 50px; text-decoration: none; font-size: 0.85rem; font-weight: 500; color: #64748B;">Kaggle Mushrooms</a>
+                <a href="Korean Wild Mushrooms.html" style="padding: 8px 14px; border-radius: 50px; text-decoration: none; font-size: 0.85rem; font-weight: 500; color: #7C3AED; background: #F5F3FF;">Korean Wild Mushrooms</a>
+                <a href="Medical Effects of Mushrooms.html" style="padding: 8px 14px; border-radius: 50px; text-decoration: none; font-size: 0.85rem; font-weight: 500; color: #64748B;">Medical Effects of Mushrooms</a>
+                <a href="Supply and Demand of Mushrooms.html" style="padding: 8px 14px; border-radius: 50px; text-decoration: none; font-size: 0.85rem; font-weight: 500; color: #64748B;">Supply and Demand of Mushrooms</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">⚖️ Baseline 3 of 5</div>
+            <h1 class="hero-title">Korean Wild Mushrooms</h1>
+            <p class="hero-subtitle"></p>
+        </div>
+    </header>
+
+    <div class="stats-banner">
+        <div class="stat-card purple"><div class="stat-icon">📊</div><div class="stat-value">180</div><div class="stat-label">Korean Edible Wild Mushroom Classes</div></div>
+        <div class="stat-card teal"><div class="stat-icon">🏡</div><div class="stat-value" >856</div><div class="stat-label">Korean Wild Mushroom Images</div></div>
+        <div class="stat-card amber"><div class="stat-icon">🏚️</div><div class="stat-value" >96%</div><div class="stat-label">Accuracy rate of Mushroom Classification</div></div>
+        <div class="stat-card red"><div class="stat-icon">⚠️</div><div class="stat-value">87</div><div class="stat-label">Edible and Medicinal Mushroom species</div></div>
+    </div>
+
+    <div class="container">
+        <div class="data-notice">
+            <div class="data-notice-icon">📋</div>
+            <div class="data-notice-text">
+                <div class="data-notice-title">Data Source & Methodology</div>
+                <div class="data-notice-desc">Datasets are gathered and combined from National Korea Arboretum and Open Data Portal of Korea. <strong>Note: More Mushroom Species and Images will be added soon.</strong></div>
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <div class="filter-header">
+                <div class="filter-icon"></div>
+                <div><div class="filter-title">Compare Medical Effect of Mushrooms in case of Heart Disease(not completed)</div><div class="filter-subtitle">Select districts and year to compare funding equity</div></div>
+            </div>
+            <div class="filter-grid">
+                <div class="filter-group">
+                    <label class="filter-label">Before Treatment</label>
+                    <select class="filter-select" id="district1">
+                        <option value="Age">Age</option>
+                        <option value="mercer_island">Sex</option>
+                        <option value="lake_washington">ChestPainType</option>
+                        <option value="issaquah">RestingBP</option>
+                        <option value="northshore">Cholesterol</option>
+                        <option value="Age">FastingBS</option>
+                        <option value="mercer_island">RestingECG</option>
+                        <option value="lake_washington">MaxHR</option>
+                        <option value="issaquah">ExerciseAngina</option>
+                        <option value="northshore">Oldpeak</option>
+                         <option value="issaquah">ExerciseAngina</option>
+                        <option value="northshore">ST_Slope</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">After Treatment</label>
+                    <select class="filter-select" id="district2">                   
+                        <option value="Age">Age</option>
+                        <option value="mercer_island">Sex</option>
+                        <option value="lake_washington">ChestPainType</option>
+                        <option value="issaquah">RestingBP</option>
+                        <option value="northshore">Cholesterol</option>
+                        <option value="Age">FastingBS</option>
+                        <option value="mercer_island">RestingECG</option>
+                        <option value="lake_washington">MaxHR</option>
+                        <option value="issaquah">ExerciseAngina</option>
+                        <option value="northshore">Oldpeak</option>
+                         <option value="issaquah">ExerciseAngina</option>
+                        <option value="northshore">ST_Slope</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Mushroom Class</label>
+                    <select class="filter-select" id="schoolYear">
+                        <option value="2023-24">Wrinkled teacup mushroom</option>
+                        <option value="2022-23">Armillaria mellea</option>
+                        <option value="2021-22">Brown flat scale mushroom</option>
+                        <option value="2020-21">Coprinus comatus</option>
+                    </select>
+                </div>
+            </div>
+            <div style="margin-top: 16px; display: flex; justify-content: flex-end;">
+                <button class="filter-btn" onclick="updateComparison()">Compare Treatment Effect</button>
+            </div>
+        </div>
+
+        <section class="section">
+            <div class="section-header">
+                <div class="section-number">1</div>
+                <h2 class="section-title">Treatment Effect for Heart Disease <span class="year-badge" > </span> Mushroom Class is: </span></h2>
+            </div>
+            <div class="comparison-container">
+                <div class="district-card wealthy">
+                    <div class="district-badge">Before Treatment</div>
+                    <div class="district-name" id="district1Name">Before Treatment</div>
+                    <div class="district-stats">
+                        <div class="district-stat"><span class="district-stat-label">Age</span><span class="district-stat-value" id="d1Enrollment"></span></div>
+                        <div class="district-stat"><span class="district-stat-label">ChestPainType</span><span class="district-stat-value" id="d1PerPupil"></span></div>
+                        <div class="district-stat"><span class="district-stat-label">RestingBP</span><span class="district-stat-value" id="d1Levy"></span></div>
+                        <div class="district-stat"><span class="district-stat-label">Cholesterol</span><span class="district-stat-value" id="d1Rate"></span></div>
+                        <div class="district-stat"><span class="district-stat-label">FastingBS</span><span class="district-stat-value" id="d1FRL"></span></div>
+                        <div class="district-stat"><span class="district-stat-label">RestingECG</span><span class="district-stat-value" id="d1Rate"></span></div>
+                        <div class="district-stat"><span class="district-stat-label">MaxHR</span><span class="district-stat-value" id="d1FRL"></span></div>
+                        <div class="district-stat"><span class="district-stat-label">ExerciseAngina</span><span class="district-stat-value" id="d1Property"></span></div>
+                        <div class="district-stat"><span class="district-stat-label">ST_Slope</span><span class="district-stat-value" id="d1FRL"></span></div>
+                    </div>
+                </div>
+                <div class="district-card poor">
+                    <div class="district-badge">After Treatment</div>
+                    <div class="district-name" id="district2Name">After Treatment</div>
+                    <div class="district-stats">
+                        <div class="district-stat"><span class="district-stat-label">Age</span><span class="district-stat-value" id="d2Enrollment"></span></div>
+                        <div class="district-stat"><span class="district-stat-label">ChestPainType</span><span class="district-stat-value" id="d2PerPupil"></span></div>
+                        <div class="district-stat"><span class="district-stat-label">RestingBP</span><span class="district-stat-value" id="d2Levy"></span></div>
+                        <div class="district-stat"><span class="district-stat-label">Cholesterol</span><span class="district-stat-value" id="d2Rate"></span></div>
+                        <div class="district-stat"><span class="district-stat-label">FastingBS</span><span class="district-stat-value" id="d2FRL"></span></div>
+                        <div class="district-stat"><span class="district-stat-label">RestingECG</span><span class="district-stat-value" id="d2Property"></span></div>
+                        <div class="district-stat"><span class="district-stat-label">MaxHR</span><span class="district-stat-value" id="d2Rate"></span></div>
+                        <div class="district-stat"><span class="district-stat-label">ExerciseAngina</span><span class="district-stat-value" id="d2FRL"></span></div>
+                        <div class="district-stat"><span class="district-stat-label">ST_Slope</span><span class="district-stat-value" id="d2Property"></span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">Effect of Mushroom Treatment</h3>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead><tr><th>Metric</th><th id="gapD1Header">Before</th><th id="gapD2Header">After</th><th>Gap</th></tr></thead>
+                        <tbody>
+                            <tr><td>RestingBP</td><td class="table-value" id="gap1PPE"></td><td class="table-value" id="gap2PPE"></td><td class="table-value negative" id="gapPPE"></td></tr>
+                            <tr><td>Cholesterol</td><td class="table-value" id="gap1Levy"></td><td class="table-value" id="gap2Levy"></td><td class="table-value negative" id="gapLevy"></td></tr>
+                            <tr><td>FastingBS</td><td class="table-value" id="gap1Rate"></td><td class="table-value" id="gap2Rate"></td><td class="table-value positive" id="gapRate"></td></tr>
+                            <tr><td>RestingECG</td><td class="table-value" id="gap1Prop"></td><td class="table-value" id="gap2Prop"></td><td class="table-value negative" id="gapProp"></td></tr>
+                            <tr><td>MaxHR</td><td class="table-value" id="gap1Prop"></td><td class="table-value" id="gap2Prop"></td><td class="table-value negative" id="gapProp"></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="insight-box warning">
+                    <div class="insight-icon"></div>
+                    <div class="insight-text"><strong>Note:</strong> <span id="insightText">This measurement of Treatment Effect will be activated if actual datasets are providided.</span></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <div class="section-number">2</div>
+                <h2 class="section-title">Treatment Effect for Breast Cancer(not completed)</h2>
+            </div>
+            <div class="card">
+                <div class="chart-container"><canvas id="perPupilChart"></canvas></div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <div class="section-number">3</div>
+                <h2 class="section-title">Treatment Effect for Diabetes(not completed) <span class="year-badge" id="tableYearBadge"></span></h2>
+            </div>
+            <div class="card">
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead><tr><th></th><th></th><th></th><th></th><th></th><th></th></tr></thead>
+                        <tbody id="allDistrictsBody"></tbody>
+                    </table>
+                </div>
+                <p style="margin-top: 16px; font-size: 0.85rem; color: var(--text-muted);">* Heart Disease Datasets are from Kaggle. Other Datasets will be aaded soon.</p>
+            </div>
+        </section>
+
+        <div class="sources">
+            <h3 class="sources-title"> Data Sources</h3>
+            <div class="source-item">   Kaggle: "www.kaggle.com"</div>
+            <div class="source-item">   Open Data Portal:"www.data.go.kr"</div>
+            <div class="source-item">   Korea National Arboretum: "wwww.kna.forest.go.kr"</div>
+            
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>Mushroom Telemedicine | MycoClinic</p>
+        <p style="margin-top: 8px;">Baseline #3: Korean Wild Mushrooms</p>
+    </footer>
+
+    <script>
+        const districtData = {
+            '2023-24': {
+                bellevue: { name: 'Bellevue School District', enrollment: 19500, perPupil: 19847, levy: 2606, rate: 0.85, frl: 12, property: 2200000 },
+                mercer_island: { name: 'Mercer Island School District', enrollment: 4200, perPupil: 21523, levy: 2890, rate: 0.72, frl: 5, property: 3100000 },
+                lake_washington: { name: 'Lake Washington School District', enrollment: 32000, perPupil: 18234, levy: 2450, rate: 0.92, frl: 15, property: 1850000 },
+                issaquah: { name: 'Issaquah School District', enrollment: 21500, perPupil: 19156, levy: 2580, rate: 0.88, frl: 10, property: 2050000 },
+                northshore: { name: 'Northshore School District', enrollment: 23000, perPupil: 17892, levy: 2320, rate: 0.95, frl: 18, property: 1720000 },
+                yakima: { name: 'Yakima School District', enrollment: 14800, perPupil: 16141, levy: 920, rate: 2.50, frl: 76, property: 370000 },
+                federal_way: { name: 'Federal Way Public Schools', enrollment: 22500, perPupil: 16854, levy: 1350, rate: 1.85, frl: 62, property: 680000 },
+                highline: { name: 'Highline Public Schools', enrollment: 17200, perPupil: 17123, levy: 1420, rate: 1.72, frl: 68, property: 750000 },
+                tukwila: { name: 'Tukwila School District', enrollment: 3100, perPupil: 18456, levy: 1180, rate: 2.15, frl: 82, property: 520000 },
+                kent: { name: 'Kent School District', enrollment: 25800, perPupil: 16523, levy: 1290, rate: 1.95, frl: 58, property: 620000 }
+            },
+            '2022-23': {
+                bellevue: { name: 'Bellevue School District', enrollment: 19200, perPupil: 18956, levy: 2520, rate: 0.82, frl: 11, property: 2100000 },
+                mercer_island: { name: 'Mercer Island School District', enrollment: 4100, perPupil: 20834, levy: 2780, rate: 0.70, frl: 5, property: 2950000 },
+                lake_washington: { name: 'Lake Washington School District', enrollment: 31500, perPupil: 17654, levy: 2380, rate: 0.90, frl: 14, property: 1780000 },
+                issaquah: { name: 'Issaquah School District', enrollment: 21200, perPupil: 18523, levy: 2490, rate: 0.85, frl: 9, property: 1980000 },
+                northshore: { name: 'Northshore School District', enrollment: 22800, perPupil: 17234, levy: 2250, rate: 0.92, frl: 17, property: 1650000 },
+                yakima: { name: 'Yakima School District', enrollment: 15100, perPupil: 15456, levy: 890, rate: 2.48, frl: 75, property: 355000 },
+                federal_way: { name: 'Federal Way Public Schools', enrollment: 22800, perPupil: 16234, levy: 1280, rate: 1.80, frl: 61, property: 650000 },
+                highline: { name: 'Highline Public Schools', enrollment: 17400, perPupil: 16567, levy: 1350, rate: 1.68, frl: 67, property: 720000 },
+                tukwila: { name: 'Tukwila School District', enrollment: 3200, perPupil: 17823, levy: 1120, rate: 2.10, frl: 81, property: 500000 },
+                kent: { name: 'Kent School District', enrollment: 26200, perPupil: 15892, levy: 1220, rate: 1.90, frl: 57, property: 590000 }
+            },
+            '2021-22': {
+                bellevue: { name: 'Bellevue School District', enrollment: 18900, perPupil: 17754, levy: 2450, rate: 0.80, frl: 10, property: 2050000 },
+                mercer_island: { name: 'Mercer Island School District', enrollment: 4050, perPupil: 19567, levy: 2650, rate: 0.68, frl: 4, property: 2800000 },
+                lake_washington: { name: 'Lake Washington School District', enrollment: 31000, perPupil: 16892, levy: 2280, rate: 0.88, frl: 13, property: 1680000 },
+                issaquah: { name: 'Issaquah School District', enrollment: 20800, perPupil: 17754, levy: 2380, rate: 0.82, frl: 8, property: 1900000 },
+                northshore: { name: 'Northshore School District', enrollment: 22500, perPupil: 16523, levy: 2150, rate: 0.90, frl: 16, property: 1580000 },
+                yakima: { name: 'Yakima School District', enrollment: 15400, perPupil: 14048, levy: 850, rate: 2.45, frl: 74, property: 340000 },
+                federal_way: { name: 'Federal Way Public Schools', enrollment: 23100, perPupil: 15567, levy: 1200, rate: 1.75, frl: 60, property: 620000 },
+                highline: { name: 'Highline Public Schools', enrollment: 17600, perPupil: 15923, levy: 1280, rate: 1.65, frl: 66, property: 690000 },
+                tukwila: { name: 'Tukwila School District', enrollment: 3300, perPupil: 17123, levy: 1050, rate: 2.05, frl: 80, property: 480000 },
+                kent: { name: 'Kent School District', enrollment: 26500, perPupil: 15234, levy: 1150, rate: 1.85, frl: 56, property: 560000 }
+            },
+            '2020-21': {
+                bellevue: { name: 'Bellevue School District', enrollment: 18500, perPupil: 17234, levy: 2380, rate: 0.78, frl: 9, property: 1980000 },
+                mercer_island: { name: 'Mercer Island School District', enrollment: 4000, perPupil: 18923, levy: 2580, rate: 0.66, frl: 4, property: 2700000 },
+                lake_washington: { name: 'Lake Washington School District', enrollment: 30500, perPupil: 16345, levy: 2200, rate: 0.86, frl: 12, property: 1600000 },
+                issaquah: { name: 'Issaquah School District', enrollment: 20500, perPupil: 17123, levy: 2300, rate: 0.80, frl: 7, property: 1820000 },
+                northshore: { name: 'Northshore School District', enrollment: 22200, perPupil: 15987, levy: 2080, rate: 0.88, frl: 15, property: 1520000 },
+                yakima: { name: 'Yakima School District', enrollment: 15600, perPupil: 13567, levy: 820, rate: 2.42, frl: 73, property: 325000 },
+                federal_way: { name: 'Federal Way Public Schools', enrollment: 23400, perPupil: 15012, levy: 1150, rate: 1.70, frl: 59, property: 600000 },
+                highline: { name: 'Highline Public Schools', enrollment: 17800, perPupil: 15345, levy: 1220, rate: 1.62, frl: 65, property: 660000 },
+                tukwila: { name: 'Tukwila School District', enrollment: 3400, perPupil: 16567, levy: 1000, rate: 2.00, frl: 79, property: 460000 },
+                kent: { name: 'Kent School District', enrollment: 26800, perPupil: 14678, levy: 1100, rate: 1.80, frl: 55, property: 540000 }
+            }
+        };
+
+        let perPupilChart = null;
+        const formatCurrency = v => '$' + v.toLocaleString();
+        const formatRate = v => '$' + v.toFixed(2) + '/$1,000';
+
+        function updateComparison() {
+            const year = document.getElementById('schoolYear').value;
+            const d1Key = document.getElementById('district1').value;
+            const d2Key = document.getElementById('district2').value;
+            const d1 = districtData[year][d1Key];
+            const d2 = districtData[year][d2Key];
+
+            document.getElementById('yearBadge').textContent = 'ðŸ“… ' + year;
+            document.getElementById('tableYearBadge').textContent = 'ðŸ“… ' + year;
+
+            document.getElementById('district1Name').textContent = 'ðŸ« ' + d1.name;
+            document.getElementById('d1Enrollment').textContent = '~' + d1.enrollment.toLocaleString();
+            document.getElementById('d1PerPupil').textContent = formatCurrency(d1.perPupil);
+            document.getElementById('d1Levy').textContent = formatCurrency(d1.levy);
+            document.getElementById('d1Rate').textContent = '~' + formatRate(d1.rate);
+            document.getElementById('d1FRL').textContent = '~' + d1.frl + '%';
+            document.getElementById('d1Property').textContent = '~$' + (d1.property / 1000000).toFixed(1) + 'M';
+
+            document.getElementById('district2Name').textContent = 'ðŸ« ' + d2.name;
+            document.getElementById('d2Enrollment').textContent = '~' + d2.enrollment.toLocaleString();
+            document.getElementById('d2PerPupil').textContent = formatCurrency(d2.perPupil);
+            document.getElementById('d2Levy').textContent = formatCurrency(d2.levy);
+            document.getElementById('d2Rate').textContent = '~' + formatRate(d2.rate) + (d2.rate >= 2.4 ? ' (MAX)' : '');
+            document.getElementById('d2FRL').textContent = '~' + d2.frl + '%';
+            document.getElementById('d2Property').textContent = '~$' + (d2.property / 1000).toFixed(0) + 'K';
+
+            document.getElementById('gapD1Header').textContent = d1.name.split(' ')[0];
+            document.getElementById('gapD2Header').textContent = d2.name.split(' ')[0];
+            document.getElementById('gap1PPE').textContent = formatCurrency(d1.perPupil);
+            document.getElementById('gap2PPE').textContent = formatCurrency(d2.perPupil);
+            document.getElementById('gapPPE').textContent = formatCurrency(d2.perPupil - d1.perPupil);
+            document.getElementById('gapPPE').className = 'table-value ' + (d2.perPupil >= d1.perPupil ? 'positive' : 'negative');
+            document.getElementById('gap1Levy').textContent = formatCurrency(d1.levy);
+            document.getElementById('gap2Levy').textContent = formatCurrency(d2.levy);
+            document.getElementById('gapLevy').textContent = formatCurrency(d2.levy - d1.levy);
+            document.getElementById('gapLevy').className = 'table-value negative';
+            document.getElementById('gap1Rate').textContent = '$' + d1.rate.toFixed(2);
+            document.getElementById('gap2Rate').textContent = '$' + d2.rate.toFixed(2);
+            document.getElementById('gapRate').textContent = '+$' + (d2.rate - d1.rate).toFixed(2) + ' higher';
+            document.getElementById('gap1Prop').textContent = '$' + (d1.property / 1000000).toFixed(1) + 'M';
+            document.getElementById('gap2Prop').textContent = '$' + (d2.property / 1000).toFixed(0) + 'K';
+            document.getElementById('gapProp').textContent = '-$' + ((d1.property - d2.property) / 1000000).toFixed(2) + 'M';
+
+            document.getElementById('statGap').textContent = formatCurrency(Math.abs(d1.perPupil - d2.perPupil));
+            document.getElementById('statWealthy').textContent = formatCurrency(d1.levy);
+            document.getElementById('statPoor').textContent = formatCurrency(d2.levy);
+
+            const rateMultiple = (d2.rate / d1.rate).toFixed(1);
+            document.getElementById('insightText').textContent = `${d2.name.split(' ')[0]} pays ${rateMultiple}x the tax rate but generates ${d2.levy < d1.levy/2 ? 'less than half' : 'less'} levy revenue per student.`;
+
+            updateChart(year);
+            updateAllDistrictsTable(year);
+        }
+
+        function updateChart(year) {
+            const data = districtData[year];
+            const sortedKeys = Object.keys(data).sort((a, b) => data[b].perPupil - data[a].perPupil);
+            const labels = sortedKeys.map(k => data[k].name.replace(' School District', '').replace(' Public Schools', ''));
+            const values = sortedKeys.map(k => data[k].perPupil);
+            const colors = sortedKeys.map(k => data[k].frl > 50 ? '#D97706' : '#0D9488');
+
+            if (perPupilChart) perPupilChart.destroy();
+            perPupilChart = new Chart(document.getElementById('perPupilChart').getContext('2d'), {
+                type: 'bar',
+                data: { labels, datasets: [{ label: 'Per-Pupil $', data: values, backgroundColor: colors, borderRadius: 8 }] },
+                options: {
+                    indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+                    scales: {
+                        x: { beginAtZero: true, ticks: { callback: v => '$' + (v/1000).toFixed(0) + 'K', font: { family: "'Space Mono'" } }, grid: { color: '#E2E8F0' } },
+                        y: { grid: { display: false }, ticks: { font: { family: "'DM Sans'" } } }
+                    },
+                    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => 'Per-Pupil: $' + ctx.raw.toLocaleString() } } }
+                }
+            });
+        }
+
+        function updateAllDistrictsTable(year) {
+            const data = districtData[year];
+            const sortedKeys = Object.keys(data).sort((a, b) => data[b].perPupil - data[a].perPupil);
+            document.getElementById('allDistrictsBody').innerHTML = sortedKeys.map(k => {
+                const d = data[k];
+                return `<tr>
+                    <td><strong>${d.name}</strong></td>
+                    <td class="table-value">~${d.enrollment.toLocaleString()}</td>
+                    <td class="table-value ${d.frl < 30 ? 'positive' : ''}">${formatCurrency(d.perPupil)}</td>
+                    <td class="table-value">${formatCurrency(d.levy)}</td>
+                    <td class="table-value">${formatRate(d.rate)}${d.rate >= 2.4 ? ' âš ï¸' : ''}</td>
+                    <td class="table-value ${d.frl > 50 ? 'negative' : ''}">${d.frl}%</td>
+                </tr>`;
+            }).join('');
+        }
+
+        document.addEventListener('DOMContentLoaded', updateComparison);
+    </script>
+</body>
+</html>
+
+

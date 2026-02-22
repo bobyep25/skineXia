@@ -1,0 +1,800 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkineXia | Customer-Specific Skin Care and Skin Cancer Detection</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563EB;
+            --primary-dark: #1D4ED8;
+            --primary-light: #3B82F6;
+            --primary-bg: #EFF6FF;
+            --green: #059669;
+            --green-bg: #ECFDF5;
+            --red: #DC2626;
+            --red-bg: #FEF2F2;
+            --purple: #7C3AED;
+            --purple-bg: #F5F3FF;
+            --orange: #EA580C;
+            --orange-bg: #FFF7ED;
+            --bg-primary: #FAFBFC;
+            --bg-card: #FFFFFF;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --border-light: #E2E8F0;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.1);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+            --radius-xl: 28px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 50%, #3B82F6 100%);
+            color: white;
+            padding: 80px 24px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        .hero-content {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto 32px;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            flex-wrap: wrap;
+            margin-top: 48px;
+        }
+
+        .hero-stat {
+            text-align: center;
+        }
+
+        .hero-stat-value {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .hero-stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Dashboard Cards Section */
+        .section {
+            padding: 80px 24px;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 48px;
+        }
+
+        .section-label {
+            display: inline-block;
+            background: var(--primary-bg);
+            color: var(--primary);
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .section-desc {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
+
+        /* Dashboard Cards Grid */
+        .dashboard-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            gap: 24px;
+        }
+
+        .dashboard-card {
+            background: white;
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-light);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @media (min-width: 768px) {
+            .dashboard-card {
+                flex-direction: row;
+            }
+
+            .dashboard-card:nth-child(even) {
+                flex-direction: row-reverse;
+            }
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .dashboard-preview {
+            flex: 0 0 45%;
+            min-height: 280px;
+            background: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-preview-icon {
+            font-size: 120px;
+            opacity: 0.15;
+            position: absolute;
+        }
+
+        .dashboard-preview-number { display: none;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 6rem;
+            font-weight: 700;
+            opacity: 0.1;
+            position: absolute;
+        }
+
+        .dashboard-preview-badge {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dashboard-preview-badge-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+        }
+
+        .dashboard-preview-badge-label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 4px 12px;
+            border-radius: 50px;
+        }
+
+        /* Card Colors */
+        .dashboard-card.intro .dashboard-preview { background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%); }
+        .dashboard-card.intro .dashboard-preview-badge-icon { background: var(--primary); color: white; }
+        .dashboard-card.intro .dashboard-preview-badge-label { background: var(--primary-bg); color: var(--primary); }
+
+        .dashboard-card.adequacy .dashboard-preview { background: linear-gradient(135deg, #FEF2F2 0%, #FECACA 100%); }
+        .dashboard-card.adequacy .dashboard-preview-badge-icon { background: var(--red); color: white; }
+        .dashboard-card.adequacy .dashboard-preview-badge-label { background: var(--red-bg); color: var(--red); }
+
+        .dashboard-card.equity .dashboard-preview { background: linear-gradient(135deg, #F5F3FF 0%, #DDD6FE 100%); }
+        .dashboard-card.equity .dashboard-preview-badge-icon { background: var(--purple); color: white; }
+        .dashboard-card.equity .dashboard-preview-badge-label { background: var(--purple-bg); color: var(--purple); }
+
+        .dashboard-card.levy .dashboard-preview { background: linear-gradient(135deg, #FFF7ED 0%, #FED7AA 100%); }
+        .dashboard-card.levy .dashboard-preview-badge-icon { background: var(--orange); color: white; }
+        .dashboard-card.levy .dashboard-preview-badge-label { background: var(--orange-bg); color: var(--orange); }
+
+        .dashboard-card.solution .dashboard-preview { background: linear-gradient(135deg, #ECFDF5 0%, #A7F3D0 100%); }
+        .dashboard-card.solution .dashboard-preview-badge-icon { background: var(--green); color: white; }
+        .dashboard-card.solution .dashboard-preview-badge-label { background: var(--green-bg); color: var(--green); }
+
+        .dashboard-content {
+            flex: 1;
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .dashboard-number {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .dashboard-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .dashboard-desc {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        .dashboard-stats {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+
+        .dashboard-stat {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dashboard-stat-value {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .dashboard-stat-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .dashboard-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .dashboard-cta-arrow {
+            transition: transform 0.2s ease;
+        }
+
+        .dashboard-card:hover .dashboard-cta-arrow {
+            transform: translateX(4px);
+        }
+
+        /* Quick Stats Section */
+        .quick-stats {
+            background: white;
+            padding: 60px 24px;
+        }
+
+        .quick-stats-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 32px;
+        }
+
+        .quick-stat {
+            text-align: center;
+            padding: 24px;
+        }
+
+        .quick-stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+        }
+
+        .quick-stat-value {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .quick-stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* About Section */
+        .about {
+            background: var(--bg-primary);
+            padding: 80px 24px;
+        }
+
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .about-logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin: 0 auto 24px;
+        }
+
+        .about-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .about-desc {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 32px;
+        }
+
+        .about-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--primary);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .about-link:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--text-primary);
+            color: white;
+            padding: 48px 24px;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            font-weight: 700;
+            font-size: 1.25rem;
+            margin-bottom: 16px;
+        }
+
+        .footer-desc {
+            opacity: 0.7;
+            margin-bottom: 24px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+            margin-bottom: 32px;
+        }
+
+        .footer-link {
+            color: white;
+            opacity: 0.7;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: opacity 0.2s ease;
+        }
+
+        .footer-link:hover {
+            opacity: 1;
+        }
+
+        .footer-copy {
+            font-size: 0.85rem;
+            opacity: 0.5;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero-stats {
+                gap: 24px;
+            }
+
+            .hero-stat-value {
+                font-size: 1.75rem;
+            }
+
+            .dashboard-content {
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav style="background: white; border-bottom: 1px solid #E2E8F0; padding: 16px 24px; position: sticky; top: 0; z-index: 100;">
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+            <a href="index.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: #1E293B;">
+                <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #2563EB 0%, #3B82F6 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px;">🎓</div>
+                <div>
+                    <div style="font-weight: 700; font-size: 1rem;">SkineXia</div>
+                    <div style="font-size: 0.7rem; color: #64748B;">Customer-Specific 
+                                                               Skin Care and Skin Cancer Diagnosis</div>
+                </div>
+            </a>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <a href="index.html" style="padding: 8px 14px; border-radius: 50px; text-decoration: none; font-size: 0.85rem; font-weight: 500; color: #2563EB; background: #EFF6FF;">Home</a>
+                <a href="Telemedicine.html" style="padding: 8px 14px; border-radius: 50px; text-decoration: none; font-size: 0.85rem; font-weight: 500; color: #64748B;">Skin Care Telemedicine</a>
+                <a href="Kaggle Mushrooms.html" style="padding: 8px 14px; border-radius: 50px; text-decoration: none; font-size: 0.85rem; font-weight: 500; color: #64748B;">ResNet50 for Skin Cancer</a>
+                <a href="Korean Wild Mushrooms.html" style="padding: 8px 14px; border-radius: 50px; text-decoration: none; font-size: 0.85rem; font-weight: 500; color: #64748B;">Random Forest for Skin Cancer</a>
+                <a href="Medical Effects of Mushrooms.html" style="padding: 8px 14px; border-radius: 50px; text-decoration: none; font-size: 0.85rem; font-weight: 500; color: #64748B;">My Skin Diary </a>
+                <a href="Supply and Demand of Mushrooms.html" style="padding: 8px 14px; border-radius: 50px; text-decoration: none; font-size: 0.85rem; font-weight: 500; color: #64748B;">Medical and Cosmetic suggestions</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">📊 Interactive Skin Care Dashboard</div>
+            <h1 class="hero-title">Customer-Specific </h1>    
+            <h1 class="hero-title"> Skin Care and Skin Cancer Diagosis </h1>
+            <p class="hero-subtitle">Explore the Amazing Medical Potentials of Deep Learing Based Skin Care and Skin Cancer Diagnosis System. </p>
+            
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <div class="hero-stat-value">14438 + 125424</div>
+                    <div class="hero-stat-label">14438 Well-known World-Wide Skin Cancer Images + 125424 Korean-Skin Status Image Database of Our Team</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-value">100%</div>
+                    <div class="hero-stat-label">Accuracy rate of Skin Cancer Diagnosis</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-value">85+</div>
+                    <div class="hero-stat-label">More than 85 features of skin status are investigated</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Quick Stats -->
+    <section class="quick-stats">
+        <div class="quick-stats-grid">
+            <div class="quick-stat">
+                <div class="quick-stat-icon">🏫</div>
+                
+                <div class="quick-stat-value">14438</div>
+                <div class="quick-stat-label">Kaggle Skin Cancer Images</div>
+            </div>
+            <div class="quick-stat">
+                <div class="quick-stat-icon">👨‍🎓</div>
+            
+                <div class="quick-stat-value">125424 + </div>
+                <div class="quick-stat-label">Korean Skin Status Images</div>
+            </div>
+            <div class="quick-stat">
+                <div class="quick-stat-icon">💰</div>
+                <div class="quick-stat-value">USD 1.79 billion </div>
+                <div class="quick-stat-label">2025, AI Skin Care Market Size</div>
+            </div>
+            <div class="quick-stat">
+                <div class="quick-stat-icon">📉</div>
+                <div class="quick-stat-value">USD 8.28 billion</div>
+                <div class="quick-stat-label">2035, AI Skin Care Maeket Size Projection</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Cards -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-label">📚 Explore the Data</div>
+            <h2 class="section-title">Five Interactive Dashboards</h2>
+            <p class="section-desc">Each dashboard breaks down a different aspect of Our Projects.</p>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- Dashboard 1: Funding 101 -->
+            <a href="Telemedicine.html" class="dashboard-card intro">
+                <div class="dashboard-preview">
+                    <div class="dashboard-preview-number">01</div>
+                    <div class="dashboard-preview-badge">
+                        <div class="dashboard-preview-badge-icon">📘</div>
+                    <div class="dashboard-preview-badge-label">Start Here</div>                    
+                    </div>
+                </div>
+                <div class="dashboard-content">
+                    <div class="dashboard-number">Dashboard 01</div>
+                    <h3 class="dashboard-title">Online Remote Diagnosis of Skin Cancer and Skin Status</h3>
+                    <p class="dashboard-desc">Start here to self-check what your Skin Status are.</p>
+                    <div class="dashboard-stats">
+                        <div class="dashboard-stat">
+                            <div class="dashboard-stat-value" style="color: var(--primary)">1st</div>
+                            <div class="dashboard-stat-label">ResNet50</div>
+                        </div>
+                        <div class="dashboard-stat">
+                            <div class="dashboard-stat-value" style="color: var(--primary)">2nd</div>
+                            <div class="dashboard-stat-label">Random Forest</div>
+                        </div>
+                        <div class="dashboard-stat">
+                            <div class="dashboard-stat-value" style="color: var(--primary)">3rd and more</div>
+                            <div class="dashboard-stat-label">Coming Soon </div>
+                        </div>
+                    </div>
+                    <div class="dashboard-cta">
+                        Learn the Basics <span class="dashboard-cta-arrow">→</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Dashboard 2: Adequacy Gap -->
+            <a href="Kaggle Mushrooms.html" class="dashboard-card adequacy">
+                <div class="dashboard-preview">
+                    <div class="dashboard-preview-number">02</div>
+                    <div class="dashboard-preview-badge">
+                        <div class="dashboard-preview-badge-icon">📉</div>
+                        <div class="dashboard-preview-badge-label">ResNet50 for Skin Cancer Diagnosis #2</div>
+                    </div>
+                </div>
+                <div class="dashboard-content">
+                    <div class="dashboard-number">Dashboard 02</div>
+                    <h3 class="dashboard-title">ResNet 50 for Skin Cancer Detection</h3>
+                    <p class="dashboard-desc">World-Wide well known Kaggle database contains images of 14438 Skin Cancer Images. Accuracy rate is over 65%, which is under development</p>
+                    <div class="dashboard-stats">
+                        <div class="dashboard-stat">
+                            <div class="dashboard-stat-value" style="color: var(--red)">65%</div>
+                            <div class="dashboard-stat-label">Accuracy for Skin Cancer Diagnosis</div>
+                        </div>
+                        <div class="dashboard-stat">
+                            <div class="dashboard-stat-value" style="color: var(--red)">65+%</div>
+                            <div class="dashboard-stat-label">Accuracy rate will be enhanced</div>
+                        </div>
+                    </div>
+                    <div class="dashboard-cta">
+                        Explore Kaggle Skin Cancer Analysis<span class="dashboard-cta-arrow">→</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Dashboard 3: Equity Gap -->
+            <a href="Korean Wild Mushrooms.html" class="dashboard-card equity">
+                <div class="dashboard-preview">
+                    <div class="dashboard-preview-number">03</div>
+                    <div class="dashboard-preview-badge">
+                        <div class="dashboard-preview-badge-icon">⚖️</div>
+                        <div class="dashboard-preview-badge-label">Random Forest Classifier #3</div>
+                    </div>
+                </div>
+                <div class="dashboard-content">
+                    <div class="dashboard-number">Dashboard 03</div>
+                    <h3 class="dashboard-title">Random Forest Classifier</h3>
+                    <p class="dashboard-desc">Deep Leatniong Classification accuracy is remarkably enhanced by using Random Forest Classifier.</p>
+                    <div class="dashboard-stats">
+                        <div class="dashboard-stat">
+                            <div class="dashboard-stat-value" style="color: var(--purple)">Data Merging +</div>
+                            <div class="dashboard-stat-label">By merging pixel meta data to images, classification accuracy is remarkably enhanced.</div>
+                        </div>
+                        <div class="dashboard-stat">
+                            <div class="dashboard-stat-value" style="color: var(--purple)"> 100%</div>
+                            <div class="dashboard-stat-label">Accuracy rate of Skin Cancer Classification. </div>
+                        </div>
+                    </div>
+                    <div class="dashboard-cta">
+                        Explore Skin Cancer Diagnosis <span class="dashboard-cta-arrow">→</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Dashboard 4: Levy Cap Paradox -->
+            <a href="Medical Effects of Mushrooms.html" class="dashboard-card levy">
+                <div class="dashboard-preview">
+                    <div class="dashboard-preview-number">04</div>
+                    <div class="dashboard-preview-badge">
+                        <div class="dashboard-preview-badge-icon">🔒</div>
+                        <div class="dashboard-preview-badge-label">My Skin Diary #4</div>
+                    </div>
+                </div>
+                <div class="dashboard-content">
+                    <div class="dashboard-number">Dashboard 04</div>
+                    <h3 class="dashboard-title">My Skin Diary</h3>
+                    <p class="dashboard-desc">Feel how amazing scientific analysis is available by tracking your skin status diary</p>
+                    <div class="dashboard-stats">
+                        <div class="dashboard-stat">
+                            <div class="dashboard-stat-value" style="color: var(--orange)">80+</div>
+                            <div class="dashboard-stat-label">More than 80 factors of your skin status will be explored, saved, and analyzed. You can always revisit to compare.</div>
+                        </div>
+                        <div class="dashboard-stat">
+                            <div class="dashboard-stat-value" style="color: var(--orange)">1072+</div>
+                            <div class="dashboard-stat-label">From 1072 poarticipants in Korea, 2024, 125424 images are collected with more than 80 features recorded.</div>
+                        </div>
+                    </div>
+                    <div class="dashboard-cta">
+                        Explore Medical Effcts of Mushroom Classes <span class="dashboard-cta-arrow">→</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Dashboard 5: Solution -->
+            <a href="Supply and Demand of Mushrooms.html" class="dashboard-card solution">
+                <div class="dashboard-preview">
+                    <div class="dashboard-preview-number">05</div>
+                    <div class="dashboard-preview-badge">
+                        <div class="dashboard-preview-badge-icon">💡</div>
+                        <div class="dashboard-preview-badge-label">Medical and Cosmetic Suggestions #5</div>
+                    </div>
+                </div>
+                <div class="dashboard-content">
+                    <div class="dashboard-number">Dashboard 05</div>
+                    <h3 class="dashboard-title">Join us now! You can experience expert suggestions based on various statistical analysis.  </h3>
+                    <p class="dashboard-desc"> .</p>
+                    <div class="dashboard-stats">
+                        <div class="dashboard-stat">
+                            <div class="dashboard-stat-value" style="color: var(--green)">For Consumers</div>
+                            <div class="dashboard-stat-label">According to the telemedicine diagosis result, medicinal and cosmetic suggestions will be ready for you.</div>
+                        </div>
+                        <div class="dashboard-stat">
+                            <div class="dashboard-stat-value" style="color: var(--green)">Our Experts are ready! → </div>
+                            <div class="dashboard-stat-label">Your skin diary will be integrated into concise and systematic statistical analysis.  </div>
+                        </div>
+                    </div>
+                    <div class="dashboard-cta">
+                        Explore Medical and Cosmetic Suggestions <span class="dashboard-cta-arrow">→</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about">
+        <div class="about-content">
+            <div class="about-logo">🌉</div>
+            <h2 class="about-title">Telemedicine Skin Care Bridge
+                <pre>About Us : Team SkineXia
+                Leader: Junseo Lee
+                Team Members: Joshua Nam, Seungmi Choi, and Jaeyun Im
+                </pre> 
+            </h2>
+            <p class="about-desc">Explore Accurate Remote Diagnosis of Skin Cancer and Skin Status at low prices, receiving expert recommendations.  We will facilitate all these procedures!</p>
+            <a href= class="about-link" target="_blank">
+                  <span></span>
+            </a>
+                <pre>SkineXia:
+                ( Junseo Lee, Joshua Nam, Seungmi Choi,and Jaeyun Im) </pre>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">SkineXia: Skin Care Telemedicine</div>
+            <p class="footer-desc">Data-driven insights into remote diagnosis for skin cancer and skin status with medicinal suggestions.</p>
+            <div class="footer-links">
+                <a href="Telemedicine.html" class="footer-link">Skin Cancer Telemedicine</a>
+                <a href="Kaggle Mushrooms.html" class="footer-link">ResNet50 for Skin Cancer</a>
+                <a href="Korean Wild Mushrooms.html" class="footer-link">Random Forest for Skin Cancer</a>
+                <a href="Medical Effects of Mushrooms.html" class="footer-link">My Skin Diary</a>
+                <a href="Supply and Demand of Mushrooms.html" class="footer-link">Medical and Cosmetic Suggestions</a>
+            </div>
+            <p class="footer-copy">© 2026 SkineXia. Data sources: Kaggle, NIA-019-028, Korea, 2024 </p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            // Simple mobile menu toggle - can be enhanced
+            const links = document.querySelector('.nav-links');
+            if (links.style.display === 'flex') {
+                links.style.display = 'none';
+            } else {
+                links.style.display = 'flex';
+                links.style.flexDirection = 'column';
+                links.style.position = 'absolute';
+                links.style.top = '100%';
+                links.style.left = '0';
+                links.style.right = '0';
+                links.style.background = 'white';
+                links.style.padding = '16px';
+                links.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+            }
+        }
+    </script>
+</body>
+</html>
+
+
+
